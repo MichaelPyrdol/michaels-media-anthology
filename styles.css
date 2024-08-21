@@ -1,0 +1,82 @@
+:root {
+    --background: rgb(6, 18, 28);
+}
+
+body {
+    font-family: arial;
+    background-color: lightblue;
+}
+
+.years {
+    height: 300px;
+}
+
+.years_chart {
+    width: 50%;
+}
+
+.num_songs {
+    height: 300px;
+}
+
+.num_songs_chart {
+    width: 45%;
+}
+
+.duration {
+    height: 250px;
+}
+
+.duration_chart {
+    width: 60%;
+}
+
+.avg_song_duration {
+    height: 250px;
+}
+
+.avg_song_duration_chart {
+    width: 60%;
+}
+
+.artist_chart {
+    height: 1000px;
+    width: 100%;
+}
+
+.container {
+    display: flex
+}
+
+.stats {
+    width: 25%;
+    padding-left: 12%;
+}
+
+img {
+    width: 128px;
+    height: 128px;
+    display: block;
+    margin: 0 auto;
+}
+
+.art {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+    gap: 3px;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    float: right;
+}
+
+td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+th {
+    font-weight: bold;
+}
