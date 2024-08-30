@@ -9,14 +9,24 @@
 </head>
 
 <body>
-    <div id="stats">
-        <div id="pop"></div>
-        <div id="film"></div>
-        <div id="vgm"></div>
-        <div id="covers"></div>
-        <div id="all"></div>
+    <h1>Michael's Music Anthology</h1>
+    <ul class="dataset-tabs tabs">
+        <li class="active"><a href="#pop">Pop</a></li>
+        <li><a href="#film">Film</a></li>
+        <li><a href="#vgm">VGM</a></li>
+        <li><a href="#covers">Covers</a></li>
+        <li><a href="#combined">Combined</a></li>
+    </ul>
+    <div class="main-tab-content">
+        <div id="pop" class="tab main active"></div>
+        <div id="film" class="tab main"></div>
+        <div id="vgm" class="tab main"></div>
+        <div id="covers" class="tab main"></div>
+        <div id="combined" class="tab main"></div>
     </div>
     <script src="math.js"></script>
+    <script src="constants.js"></script>
+    <script src="html.js"></script>
     <script src="data.js"></script>
     <script src="charts.js"></script>
     <script src="main.js"></script>

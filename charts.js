@@ -1,3 +1,4 @@
+const chartTitleFontSize=20;
 function determineFullRange(valueArrays) {
     const allValues = valueArrays.flat();
     const min = Math.min(...allValues);
@@ -23,7 +24,23 @@ function getDistribution(valueArray, fullRange) {
     });
     return valueCount;
 }
-function drawChart(id, valueArrays, title, x_axis, labels, colors) {
+function drawPieChart(chart, arrays, title, labels, colors) {
+    const data = google.visualization.arrayToDataTable(arrays);
+    const options = {
+        title: title,
+        titleTextStyle: {
+            fontSize: 12
+        },
+        colors: colors,
+        chartArea: { width: '40%' },
+        legend: {
+            position: 'top'
+        },
+        backgroundColor: "lightblue"
+    };
+    chart.draw(data, options);
+}
+function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
     const fullRange = determineFullRange(valueArrays);
     const dataArray = [[x_axis, ...labels]];
     fullRange.forEach(value => {
@@ -37,7 +54,7 @@ function drawChart(id, valueArrays, title, x_axis, labels, colors) {
     const options = {
         title: title,
         titleTextStyle: {
-            fontSize: 20
+            fontSize: chartTitleFontSize
         },
         chartArea: { width: '80%' },
         hAxis: {
@@ -50,27 +67,24 @@ function drawChart(id, valueArrays, title, x_axis, labels, colors) {
             slantedTextAngle: 90
         },
         vAxis: {
-            title: '# of Albums'
+            title: '# of Albums',
+            format: '0'
         },
         isStacked: true,
         legend: {
-            position: 'top',
-            textStyle: {
-                fontSize: 12
-            }
+            position: 'top'
         },
         colors: colors,
         backgroundColor: "lightblue"
     };
-    const chart = new google.visualization.ColumnChart(document.getElementById(id));
     chart.draw(data, options);
 }
-function drawChart2(id, dataArray, title, x_axis, labels, colors) {
+function drawArtistChart(chart, dataArray, title, colors) {
     const data = google.visualization.arrayToDataTable(dataArray);
     const options = {
         title: title,
         titleTextStyle: {
-            fontSize: 20
+            fontSize: chartTitleFontSize
         },
         chartArea: { width: '40%' },
         hAxis: {
@@ -81,18 +95,15 @@ function drawChart2(id, dataArray, title, x_axis, labels, colors) {
             }
         },
         vAxis: {
-            title: x_axis
+            title: 'Artist',
+            format: '0'
         },
         isStacked: true,
         legend: {
-            position: 'top',
-            textStyle: {
-                fontSize: 12
-            }
+            position: 'top'
         },
         colors: colors,
         backgroundColor: "lightblue"
     };
-    const chart = new google.visualization.BarChart(document.getElementById(id));
     chart.draw(data, options);
 }

@@ -4,21 +4,36 @@ function findSum(arr) {
     return sum;
 }
 function findMean(arr) {
+    if (arr.length == 0) {
+        return "-";
+    }
     const sum = findSum(arr)
     const mean = sum / arr.length;
     return mean.toFixed(1);
 }
 function findMedian(arr) {
-    let intArray = arr.map(value => parseFloat(value, 10));
+    if (arr.length == 0) {
+        return "-";
+    }
+    let median;
+    let intArray = arr.map(value => parseFloat(value));
     intArray.sort((a, b) => a - b);
     const mid = Math.floor(intArray.length / 2);
     if (intArray.length % 2 !== 0) {
-        return intArray[mid];
+        median = intArray[mid];
     } else {
-        return (intArray[mid - 1] + intArray[mid]) / 2;
+        median = (intArray[mid - 1] + intArray[mid]) / 2;
+    }
+    if (intArray.some(value => value % 1 !== 0)) {
+        return median.toFixed(1);
+    } else {
+        return median;
     }
 }
 function findMode(arr) {
+    if (arr.length == 0) {
+        return "-";
+    }
     const frequency = {};
     let maxFreq = 0;
     arr.forEach(num => {
@@ -36,14 +51,14 @@ function findMode(arr) {
     return modes.join(', ');
 }
 function findStandardDeviation(arr) {
+    if (arr.length == 0) {
+        return "-";
+    }
     let intArray = arr.map(value => parseInt(value, 10));
     const n = intArray.length;
     if (n === 0) return 0;
-
     const mean = intArray.reduce((sum, value) => sum + value, 0) / n;
-
     const variance = intArray.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / n;
-
     const standardDeviation = Math.sqrt(variance);
     return standardDeviation.toFixed(1);
 }

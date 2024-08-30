@@ -1,17 +1,26 @@
 :root {
-    --background: rgb(6, 18, 28);
+    --background: lightblue;
+}
+
+html {
+    overflow-y: scroll;
 }
 
 body {
     font-family: arial;
-    background-color: lightblue;
+    background-color: var(--background);
 }
 
-.years {
+h1,
+h2 {
+    text-align: center;
+}
+
+.album_years {
     height: 300px;
 }
 
-.years_chart {
+.album_years_chart {
     width: 50%;
 }
 
@@ -40,7 +49,7 @@ body {
 }
 
 .artist_chart {
-    height: 1000px;
+    height: 1200px;
     width: 100%;
 }
 
@@ -48,9 +57,12 @@ body {
     display: flex
 }
 
-.stats {
+.chartStats {
     width: 25%;
     padding-left: 12%;
+}
+.stats table{
+    margin: 0 auto;
 }
 
 img {
@@ -60,15 +72,17 @@ img {
     margin: 0 auto;
 }
 
-.art {
+.art2 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
     gap: 3px;
 }
 
-table {
+table{
     border-spacing: 0;
     border-collapse: collapse;
+}
+.chartStats table {
     float: right;
 }
 
@@ -79,4 +93,36 @@ td {
 
 th {
     font-weight: bold;
+}
+
+.tabs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.tabs li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    border: 5px solid black;
+}
+
+.tabs li a {
+    padding: 10px 20px;
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: black;
+}
+
+.tabs li.active a {
+    color: black;
+    background: white;
+}
+
+.active {
+    display: block;
 }
