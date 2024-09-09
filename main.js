@@ -1,15 +1,10 @@
-const datasets = Object.keys(RANGES);
-datasets.push('combined');
-const albums = initializeObject();
-const album_artist = initializeObject();
-const album_title = initializeObject();
-const album_years = initializeObject();
-const num_songs = initializeObject();
-const duration = initializeObject();
-const avg_song_duration = initializeObject();
-const nationality = initializeObject();
-datasets.forEach(dataset => {
-    populateHTML(dataset);
+let chartsReadyCount = 0;
+const datasetTabs = document.getElementById('datasetTabs')
+const datasetTabContent = document.getElementById('datasetTabContent')
+datasetIDs.forEach((dataset, index) => {
+    datasetTabs.innerHTML += `<li class="${dataset}"><a href="#${dataset}">${datasets[index]}</a></li>`
+    datasetTabContent.innerHTML += `<div id="${dataset}" class="tab main active"></div>`
+    populateHTML(dataset, datasets[index]);
 })
 gapi.load("client", loadClient);
 google.charts.load('current', { 'packages': ['corechart'] });
@@ -24,76 +19,86 @@ tabs.forEach(tab => {
         tabs.forEach(item => item.classList.remove('active'));
         tab.classList.add("active")
         const activeTab = tab.querySelector('a').getAttribute('href');
-        document.querySelector(activeTab).style.display = 'block';
+        document.querySelector(activeTab).style.display = '';
     });
 });
-const albumTabs = document.querySelectorAll('.album-tabs li');
-const albumTabContents = document.querySelectorAll('.tab-content .tab');
-albumTabs.forEach(tab => {
-    tab.addEventListener('click', function (event) {
-        event.preventDefault();
-        albumTabContents.forEach(tabContent => {
-            tabContent.style.display = 'none';
-            tabContent.classList.remove('active')
-        })
-        albumTabs.forEach(item => item.classList.remove('active'));
-        tab.classList.add("active")
-        const activeTab = tab.querySelector('a').getAttribute('href');
-        const tabSection = document.querySelectorAll("." + activeTab.split("_")[1])
-        document.querySelector(activeTab).style.display = 'block';
-        tabSection.forEach(section => {
-            section.style.display = 'block'
-            section.classList.add('active')
-        })
+setupTabs('.medium-tabs li', '.medium-tab');
+setupTabs('.album-tabs li', '.album-tab-content .tab');
+setupTabs('.song-tabs li', '.song-tab-content .tab');
+function setupTabs(tabsSelector, tabContentSelector) {
+    const tabs = document.querySelectorAll(tabsSelector);
+    const tabContents = document.querySelectorAll(tabContentSelector);
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function (event) {
+            event.preventDefault();
+            tabContents.forEach(tabContent => {
+                tabContent.style.display = 'none';
+                tabContent.classList.remove('active');
+            });
+            tabs.forEach(item => item.classList.remove('active'));
+
+            tab.classList.add("active");
+            const activeTab = tab.querySelector('a').getAttribute('href');
+            const tabSection = document.querySelectorAll("." + activeTab.slice(activeTab.indexOf('_') + 1));
+            document.querySelector(activeTab).style.display = '';
+            tabSection.forEach(section => {
+                section.style.display = '';
+                section.classList.add('active');
+            });
+        });
     });
-});
-const keyMap = {
-    '1': "isFav",
-    '2': "vi",
-    '3': "sg",
-    '4': "mf"
-};
+}
+const keyMap = {};
+for (let i = 0; i < albumSubCategories.length; i++) {
+    keyMap[(i + 1).toString()] = albumSubCategories[i].suffix;
+}
 document.addEventListener('keydown', function (event) {
     if (event.key in keyMap) {
-        datasets.forEach(dataset => {
+        datasetIDs.forEach(dataset => {
             const suffix = keyMap[event.key];
-            const elementIDs = ["album_years", "num_songs", "duration", "avg_song_duration", "artist"];
-            elementIDs.forEach(id => {
-                subCategories.forEach(subcategory => {
-                    const chart = document.getElementById(dataset + "_" + id + "_chart_" + subcategory.suffix);
+            albumElementIDs.forEach(id => {
+                albumSubCategories.forEach(subcategory => {
+                    const section = document.getElementById(dataset + "_" + id + "_" + subcategory.suffix);
+                    section.style.display = 'none';
+                });
+            });
+            albumElementIDs.forEach(id => {
+                const chart = document.getElementById(dataset + "_" + id + "_" + suffix);
+                chart.style.display = '';
+            });
+        });
+    }
+});
+const songKeyMap = {};
+for (let i = 0; i < songSubCategories.length; i++) {
+    songKeyMap[(i + 1).toString()] = songSubCategories[i].suffix;
+}
+document.addEventListener('keydown', function (event) {
+    if (event.key in songKeyMap) {
+        datasetIDs.forEach(dataset => {
+            const suffix = songKeyMap[event.key];
+            songElementIDs.forEach(id => {
+                songSubCategories.forEach(subcategory => {
+                    const chart = document.getElementById(dataset + "_" + id + "_" + subcategory.suffix);
                     chart.style.display = 'none';
                 });
             });
-            chartTypes.forEach(chartType => {
-                subCategories.forEach(subcategory => {
-                    const stats = document.getElementById(dataset + "_" + chartType.id + "_chartStats_" + subcategory.suffix);
-                    stats.style.display = 'none';
-                });
-            })
-            subCategories.forEach(subcategory => {
-                const stats = document.getElementById(dataset + "_stats_" + subcategory.suffix);
-                stats.style.display = 'none';
-            })
-            elementIDs.forEach(id => {
-                const chart = document.getElementById(dataset + "_" + id + "_chart_" + suffix);
-                chart.style.display = 'block';
+            songElementIDs.forEach(id => {
+                const chart = document.getElementById(dataset + "_" + id + "_" + suffix);
+                chart.style.display = '';
             });
-            chartTypes.forEach(chartType => {
-                const stats = document.getElementById(dataset + "_" + chartType.id + "_chartStats_" + suffix);
-                stats.style.display = 'block';
-            });
-            subCategories.forEach(subcategory => {
-                const stats = document.getElementById(dataset + "_stats_" + suffix);
-                stats.style.display = 'block';
-            })
         });
     }
 });
 function fixStats(dataset) {
     const elemsToRound = ['album_years_mean', 'album_years_median', 'num_songs_mean', 'num_songs_stdev']
-    subCategories.forEach(subcategory => {
+    albumSubCategories.forEach(subcategory => {
         subcategory.id.forEach(ide => {
             elemsToRound.forEach(elem => {
+                const roundAll = document.getElementById(dataset + "_" + elem + "_" + subcategory.suffix + '_all')
+                if (roundAll.innerHTML != '-') {
+                    roundAll.innerHTML = Math.round(roundAll.innerHTML);
+                }
                 const toRound = document.getElementById(dataset + "_" + elem + '_' + ide)
                 if (toRound.innerHTML != '-') {
                     toRound.innerHTML = Math.round(toRound.innerHTML);
@@ -110,6 +115,21 @@ function fixStats(dataset) {
                 const stdev_all = document.getElementById(dataset + "_" + chartType.id + '_stdev_' + ide)
                 if (stdev_all.innerHTML != "-") {
                     stdev_all.innerText += ' ' + chartType.units;
+                }
+            })
+        })
+    })
+    const songElems = ['song_years_mean', 'song_years_median']
+    songSubCategories.forEach(subcategory => {
+        songElems.forEach(elem => {
+            const roundAll = document.getElementById(dataset + "_" + elem + "_" + subcategory.suffix + '_all')
+            if (roundAll.innerHTML != '-') {
+                roundAll.innerHTML = Math.round(roundAll.innerHTML);
+            }
+            subcategory.id.forEach(ide => {
+                const toRound = document.getElementById(dataset + "_" + elem + '_' + ide)
+                if (toRound.innerHTML != '-') {
+                    toRound.innerHTML = Math.round(toRound.innerHTML);
                 }
             })
         })

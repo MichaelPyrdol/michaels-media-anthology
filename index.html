@@ -10,24 +10,16 @@
 
 <body>
     <h1>Michael's Music Anthology</h1>
-    <ul class="dataset-tabs tabs">
-        <li class="active"><a href="#pop">Pop</a></li>
-        <li><a href="#film">Film</a></li>
-        <li><a href="#vgm">VGM</a></li>
-        <li><a href="#covers">Covers</a></li>
-        <li><a href="#combined">Combined</a></li>
-    </ul>
-    <div class="main-tab-content">
-        <div id="pop" class="tab main active"></div>
-        <div id="film" class="tab main"></div>
-        <div id="vgm" class="tab main"></div>
-        <div id="covers" class="tab main"></div>
-        <div id="combined" class="tab main"></div>
-    </div>
+    <!-- <progress id="progress-bar" value="0" max="100"></progress> -->
+    <ul id='datasetTabs' class="dataset-tabs tabs"></ul>
+    <div id='datasetTabContent' class="main-tab-content"></div>
+    <script src="debug.js"></script>
     <script src="math.js"></script>
     <script src="constants.js"></script>
     <script src="html.js"></script>
     <script src="data.js"></script>
+    <script src="albums.js"></script>
+    <script src="songs.js"></script>
     <script src="charts.js"></script>
     <script src="main.js"></script>
 </body>

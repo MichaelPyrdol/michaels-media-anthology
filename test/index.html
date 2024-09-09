@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Font and Text Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #text-display {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            font-size: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Custom Font and Text Display</h1>
+
+    <label for="font-upload">Upload your font:</label>
+    <input type="file" id="font-upload" accept=".ttf,.otf,.woff,.woff2">
+
+    <br><br>
+
+    <label for="text-input">Enter your text:</label>
+    <input type="text" id="text-input" placeholder="Type something...">
+
+    <div id="text-display">Your text will appear here.</div>
+
+    <script>
+        const fontUpload = document.getElementById('font-upload');
+        const textInput = document.getElementById('text-input');
+        const textDisplay = document.getElementById('text-display');
+
+        // Function to handle font upload and apply it
+        function handleFontUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fontData = e.target.result;
+
+                    // Create a unique font name
+                    const fontName = file.name.replace(/\.[^/.]+$/, ""); // Remove file extension
+
+                    // Create a @font-face style
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(`
+                        @font-face {
+                            font-family: '${fontName}';
+                            src: url(${fontData});
+                        }
+                    `));
+
+                    // Append the style to the document head
+                    document.head.appendChild(style);
+
+                    // Apply the custom font to the text display
+                    textDisplay.style.fontFamily = fontName;
+
+                    // Update text display
+                    updateTextDisplay();
+                };
+
+                // Read the font file as a data URL
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Function to update the displayed text
+        function updateTextDisplay() {
+            const userInput = textInput.value;
+            textDisplay.textContent = userInput || "Your text will appear here.";
+        }
+
+        // Event listeners
+        fontUpload.addEventListener('change', handleFontUpload);
+        textInput.addEventListener('input', updateTextDisplay);
+    </script>
+
+</body>
+</html>

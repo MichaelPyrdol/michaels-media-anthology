@@ -7,6 +7,7 @@ A nerdy website that tracks stats about the music I listen to.
 -Google Charts API is used to create graphs
 
 ## Planned features
--Hovering over album art to view [Artist] — [Album Title]\
 -Decade distribution\
--Songs
+-Reduced load times\
+-The ability to isolate favorite / recitable songs\
+-Combined tab

@@ -1,8 +1,15 @@
-const chartTitleFontSize=20;
-function determineFullRange(valueArrays) {
+const chartTitleFontSize = 20;
+function determineFullRange(valueArrays, x_axis) {
     const allValues = valueArrays.flat();
-    const min = Math.min(...allValues);
-    const max = Math.max(...allValues);
+    let min;
+    let max;
+    if (x_axis == 'Year') {
+        min = 1924;
+        max = 2024;
+    } else {
+        min = Math.min(...allValues);
+        max = Math.max(...allValues);
+    }
     const hasDecimals = allValues.some(value => value % 1 !== 0);
     const step = hasDecimals ? 0.1 : 1;
     const fullRange = [];
@@ -41,15 +48,24 @@ function drawPieChart(chart, arrays, title, labels, colors) {
     chart.draw(data, options);
 }
 function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
-    const fullRange = determineFullRange(valueArrays);
+    const fullRange = determineFullRange(valueArrays, x_axis);
     const dataArray = [[x_axis, ...labels]];
     fullRange.forEach(value => {
         const row = [value.toString()];
         valueArrays.forEach(valueArray => {
-            row.push(getDistribution(valueArray, fullRange)[value] || 0);
+            row.push(getDistribution(valueArray, fullRange)[value]);
         });
         dataArray.push(row);
     });
+    let maxValue = ''
+    let vAxisTitle = ''
+    if (title == 'Songs by Year') {
+        maxValue = 80;
+        vAxisTitle = '# of Songs';
+    } else if (title == 'Albums by Year') {
+        maxValue = 10;
+        vAxisTitle = '# of Albums';
+    }
     const data = google.visualization.arrayToDataTable(dataArray);
     const options = {
         title: title,
@@ -67,8 +83,8 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
             slantedTextAngle: 90
         },
         vAxis: {
-            title: '# of Albums',
-            format: '0'
+            title: vAxisTitle,
+            maxValue: maxValue
         },
         isStacked: true,
         legend: {
@@ -79,14 +95,15 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
     };
     chart.draw(data, options);
 }
-function drawArtistChart(chart, dataArray, title, colors) {
-    const data = google.visualization.arrayToDataTable(dataArray);
+function drawNominalChart(chart, dataArray, title, colors) {
+    const limitedDataArray = [dataArray[0], ...dataArray.slice(1, 31)];
+    const data = google.visualization.arrayToDataTable(limitedDataArray);
     const options = {
         title: title,
         titleTextStyle: {
             fontSize: chartTitleFontSize
         },
-        chartArea: { width: '40%' },
+        chartArea: { width: '40%', height: '80%' },
         hAxis: {
             title: '# of Albums',
             minValue: 0,
