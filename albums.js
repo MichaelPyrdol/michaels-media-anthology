@@ -72,12 +72,12 @@ function processAlbumData(data, dataset) {
 function generateImage(album) {
     let fileName = album.title.replace(/:/g, '-');
     let imgElement = document.createElement('img');
-    imgElement.src = `images/${album.dataset}/${fileName}.jpeg`;
+    imgElement.src = `images/${album.dataset.toLowerCase()}/${fileName}.jpeg`;
     let fallbackAttempted = false;
     imgElement.onerror = () => {
         if (!fallbackAttempted) {
             fallbackAttempted = true;
-            imgElement.src = `images/${album.dataset}/${album.title}.jpeg`;
+            imgElement.src = `images/${album.dataset.toLowerCase()}/${album.title}.jpeg`;
         }else {
             imgElement.onerror = null;
         }
