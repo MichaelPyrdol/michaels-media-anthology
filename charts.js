@@ -6,6 +6,9 @@ function determineFullRange(valueArrays, x_axis) {
     if (x_axis == 'Year') {
         min = 1924;
         max = 2024;
+    } else if (x_axis == 'Decade') {
+        min = 1920;
+        max = 2020;
     } else {
         min = Math.min(...allValues);
         max = Math.max(...allValues);
@@ -38,21 +41,29 @@ function drawPieChart(chart, arrays, title, labels, colors) {
         titleTextStyle: {
             fontSize: 12
         },
-        colors: colors,
-        chartArea: { width: '40%' },
         legend: {
-            position: 'top'
+            position: 'left',
+            alignment: 'center'
         },
-        backgroundColor: "lightblue"
+        colors: colors,
+        backgroundColor: "lightblue",
+        chartArea: { width: '100%' },
     };
     chart.draw(data, options);
 }
 function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
-    const fullRange = determineFullRange(valueArrays, x_axis);
+    let fullRange = determineFullRange(valueArrays, x_axis);
+    if (title.split(' ')[2] == 'Decade') {
+        fullRange = fullRange.map(year => Math.floor(year / 10) * 10);
+        fullRange = [...new Set(fullRange)];
+    }
     const dataArray = [[x_axis, ...labels]];
     fullRange.forEach(value => {
         const row = [value.toString()];
         valueArrays.forEach(valueArray => {
+            if (title.split(' ')[2] == 'Decade') {
+                valueArray = valueArray.map(year => Math.floor(year / 10) * 10)
+            }
             row.push(getDistribution(valueArray, fullRange)[value]);
         });
         dataArray.push(row);
@@ -60,7 +71,7 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
     let maxValue = ''
     let vAxisTitle = ''
     if (title == 'Songs by Year') {
-        maxValue = 80;
+        maxValue = 120;
         vAxisTitle = '# of Songs';
     } else if (title == 'Albums by Year') {
         maxValue = 10;
@@ -72,7 +83,6 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
         titleTextStyle: {
             fontSize: chartTitleFontSize
         },
-        chartArea: { width: '80%' },
         hAxis: {
             title: x_axis,
             minValue: 0,
@@ -86,12 +96,13 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
             title: vAxisTitle,
             maxValue: maxValue
         },
-        isStacked: true,
         legend: {
             position: 'top'
         },
+        isStacked: true,
         colors: colors,
-        backgroundColor: "lightblue"
+        backgroundColor: "lightblue",
+        chartArea: { width: '80%' },
     };
     chart.draw(data, options);
 }
@@ -103,7 +114,6 @@ function drawNominalChart(chart, dataArray, title, colors) {
         titleTextStyle: {
             fontSize: chartTitleFontSize
         },
-        chartArea: { width: '40%', height: '80%' },
         hAxis: {
             title: '# of Albums',
             minValue: 0,
@@ -112,15 +122,15 @@ function drawNominalChart(chart, dataArray, title, colors) {
             }
         },
         vAxis: {
-            title: 'Artist',
-            format: '0'
+            title: 'Artist'
         },
-        isStacked: true,
         legend: {
             position: 'top'
         },
+        isStacked: true,
         colors: colors,
-        backgroundColor: "lightblue"
+        backgroundColor: "lightblue",
+        chartArea: { width: '40%', height: '80%' },
     };
     chart.draw(data, options);
 }

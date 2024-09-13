@@ -25,67 +25,53 @@ h3 {
 }
 
 .years {
-    height: 450px;
-}
-
-.num_songs {
-    height: 300px;
-}
-
-.num_songs_chart {
-    width: 45%;
-}
-
-.duration {
-    height: 250px;
+    height: 500px;
 }
 
 .duration_chart {
-    width: 60%;
-}
-
-.avg_song_duration {
-    height: 250px;
-}
-
-.avg_song_duration_chart {
-    width: 60%;
+    margin-left: auto;
+    width: 50%;
+    height: 300px;
 }
 
 .artist_chart {
-    height: 800px;
+    height: 700px;
 }
 
 .media_chart {
-    height: 800px;
+    height: 700px;
 }
 
 .stats_chart {
     height: 300px;
 }
 
+.stats_chart div {
+    margin: 0 auto
+}
+
 .container {
     display: flex
 }
 
+.statsContainer {
+    height: 300px;
+}
+
 .chartStats {
-    width: 25%;
-    padding-left: 12%;
+    width: 50%;
 }
 
-.songChartStats table {
-    margin: 0 auto;
+.pieChart {
+    margin-left: auto;
+    width: 35%
 }
 
-.albums_stats table {
-    margin: 0 auto;
+.pieChartStats {
+    width: 40%;
 }
 
-.pieChart div {
-    margin: 0 auto;
-}
-
-.songs_stats_stats table {
+.autoMargin table {
     margin: 0 auto;
 }
 
@@ -108,7 +94,7 @@ table {
 }
 
 .chartStats table {
-    float: right;
+    float: left;
 }
 
 td {
@@ -182,7 +168,7 @@ th {
 
 .containey {
     position: relative;
-    width: 128px;
+    margin: 0 auto
 }
 
 .image {
@@ -220,6 +206,25 @@ th {
 }
 
 button {
-    margin:0 auto;
+    margin: 0 auto;
     display: block;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other content */
+}
+
+/* Style for the loading GIF */
+.loading-overlay img {
+    width: 100px; /* Adjust size as needed */
+    height: 100px;
 }

@@ -1,30 +1,65 @@
 let chartsReadyCount = 0;
-const datasetTabs = document.getElementById('datasetTabs')
-const datasetTabContent = document.getElementById('datasetTabContent')
-datasetIDs.forEach((dataset, index) => {
-    datasetTabs.innerHTML += `<li class="${dataset}"><a href="#${dataset}">${datasets[index]}</a></li>`
-    datasetTabContent.innerHTML += `<div id="${dataset}" class="tab main active"></div>`
-    populateHTML(dataset, datasets[index]);
-})
 gapi.load("client", loadClient);
 google.charts.load('current', { 'packages': ['corechart'] });
+const mediaTabs=document.getElementById('mediaTabs')
+const mediaTabContent=document.getElementById('mediaTabContent')
+// media.forEach((type, index) => {
+//     mediaTabs.innerHTML += `<li class="${type.toLowerCase}"><a href="#${type.toLowerCase()}">${type}</a></li>`
+//     // mediaTabContent.innerHTML += `<div id="${type.toLowerCase}" class="tab main active" data-index='${index}'></div>`
+// })
+const datasetTabs = document.getElementById('musicTabs')
+const datasetTabContent = document.getElementById('musicTabContent')
+dataTypes[0].datasetIDs.forEach((dataset, index) => {
+    datasetTabs.innerHTML += `<li class="${dataset}"><a href="#${dataset}">${dataTypes[0].combined[index]}</a></li>`
+    datasetTabContent.innerHTML += `<div id="${dataset}" class="tab main active" data-index='${index}'></div>`
+    populateHTML(dataset, dataTypes[0].combined[index]);
+    fixView(dataset, 'none')
+})
+// const vgTabs = document.getElementById('vgTabs')
+// const vgTabContent = document.getElementById('vgTabContent')
+// dataTypes[2].datasetIDs.forEach((dataset, index) => {
+//     vgTabs.innerHTML += `<li class="${dataset}"><a href="#${dataset}">${dataTypes[2].combined[index]}</a></li>`
+//     vgTabContent.innerHTML += `<div id="${dataset}" class="tab main active" data-index='${index}'></div>`
+//     VGpopulateHTML(dataset, dataTypes[2].combined[index]);
+//     // fixView(dataset, 'none')
+// })
+// dataTypes[2].datasetIDs.forEach((dataset, index) => {
+//     VGpopulateHTML(dataset, dataTypes[2].datasets[index])
+//     console.log(dataStore.vgData[index])
+//     processvgData(dataStore.vgData[index], dataset)
+// })
 const tabs = document.querySelectorAll('.dataset-tabs li');
 const tabContents = document.querySelectorAll('.main-tab-content .main');
+const visitedTabs = new Set();
 tabs.forEach(tab => {
     tab.addEventListener('click', function (event) {
         event.preventDefault();
+        const activeTab = tab.querySelector('a').getAttribute('href');
+        const tabContent = document.querySelector(activeTab);
+        if (!visitedTabs.has(activeTab)) {
+            // document.getElementById('loadingOverlay').style.display = 'flex';
+            const index = tabContent.getAttribute('data-index')
+            const range = tabContent.id
+            fixView(range, '')
+            processAlbumData(dataStore.albumsData[index], range);
+            processSongData(dataStore.songsData[index], range);
+            processAllData(range)
+            visitedTabs.add(activeTab);
+        }
         tabContents.forEach(tabContent => {
             tabContent.style.display = 'none';
-        })
+        });
         tabs.forEach(item => item.classList.remove('active'));
-        tab.classList.add("active")
-        const activeTab = tab.querySelector('a').getAttribute('href');
-        document.querySelector(activeTab).style.display = '';
+        tab.classList.add("active");
+
+        tabContent.style.display = '';
     });
 });
+setupTabs('.media-tabs li', '.media-tab')
 setupTabs('.medium-tabs li', '.medium-tab');
-setupTabs('.album-tabs li', '.album-tab-content .tab');
-setupTabs('.song-tabs li', '.song-tab-content .tab');
+musicMediums.forEach(medium => {
+    setupTabs('.' + medium + '-tabs li', '.' + medium + '-tab-content .tab');
+})
 function setupTabs(tabsSelector, tabContentSelector) {
     const tabs = document.querySelectorAll(tabsSelector);
     const tabContents = document.querySelectorAll(tabContentSelector);
@@ -48,90 +83,26 @@ function setupTabs(tabsSelector, tabContentSelector) {
         });
     });
 }
-const keyMap = {};
-for (let i = 0; i < albumSubCategories.length; i++) {
-    keyMap[(i + 1).toString()] = albumSubCategories[i].suffix;
-}
-document.addEventListener('keydown', function (event) {
-    if (event.key in keyMap) {
-        datasetIDs.forEach(dataset => {
-            const suffix = keyMap[event.key];
-            albumElementIDs.forEach(id => {
-                albumSubCategories.forEach(subcategory => {
-                    const section = document.getElementById(dataset + "_" + id + "_" + subcategory.suffix);
-                    section.style.display = 'none';
+musicMediums.forEach((medium, index) => {
+    const keyMap = {};
+    for (let i = 0; i < subcategories[index].length; i++) {
+        keyMap[(i + 1).toString()] = subcategories[index][i].suffix;
+    }
+    document.addEventListener('keydown', function (event) {
+        if (event.key in keyMap) {
+            dataTypes[0].datasetIDs.forEach(dataset => {
+                const suffix = keyMap[event.key];
+                elementIDs[index].forEach(id => {
+                    subcategories[index].forEach(subcategory => {
+                        const section = document.getElementById(dataset + "_" + id + "_" + subcategory.suffix);
+                        section.style.display = 'none';
+                    });
+                });
+                elementIDs[index].forEach(id => {
+                    const chart = document.getElementById(dataset + "_" + id + "_" + suffix);
+                    chart.style.display = '';
                 });
             });
-            albumElementIDs.forEach(id => {
-                const chart = document.getElementById(dataset + "_" + id + "_" + suffix);
-                chart.style.display = '';
-            });
-        });
-    }
-});
-const songKeyMap = {};
-for (let i = 0; i < songSubCategories.length; i++) {
-    songKeyMap[(i + 1).toString()] = songSubCategories[i].suffix;
-}
-document.addEventListener('keydown', function (event) {
-    if (event.key in songKeyMap) {
-        datasetIDs.forEach(dataset => {
-            const suffix = songKeyMap[event.key];
-            songElementIDs.forEach(id => {
-                songSubCategories.forEach(subcategory => {
-                    const chart = document.getElementById(dataset + "_" + id + "_" + subcategory.suffix);
-                    chart.style.display = 'none';
-                });
-            });
-            songElementIDs.forEach(id => {
-                const chart = document.getElementById(dataset + "_" + id + "_" + suffix);
-                chart.style.display = '';
-            });
-        });
-    }
-});
-function fixStats(dataset) {
-    const elemsToRound = ['album_years_mean', 'album_years_median', 'num_songs_mean', 'num_songs_stdev']
-    albumSubCategories.forEach(subcategory => {
-        subcategory.id.forEach(ide => {
-            elemsToRound.forEach(elem => {
-                const roundAll = document.getElementById(dataset + "_" + elem + "_" + subcategory.suffix + '_all')
-                if (roundAll.innerHTML != '-') {
-                    roundAll.innerHTML = Math.round(roundAll.innerHTML);
-                }
-                const toRound = document.getElementById(dataset + "_" + elem + '_' + ide)
-                if (toRound.innerHTML != '-') {
-                    toRound.innerHTML = Math.round(toRound.innerHTML);
-                }
-            })
-            const num_songs_sum = findSum(num_songs[dataset][ide]);
-            const duration_sum = findSum(duration[dataset][ide]);
-            const avg_song_duration_mean = duration_sum / num_songs_sum;
-            const avg_song_duration_mean_elem = document.getElementById(dataset + '_avg_song_duration_mean_' + ide);
-            if (avg_song_duration_mean_elem.innerHTML != '-') {
-                avg_song_duration_mean_elem.innerText = avg_song_duration_mean.toFixed(1);
-            }
-            chartTypes.forEach(chartType => {
-                const stdev_all = document.getElementById(dataset + "_" + chartType.id + '_stdev_' + ide)
-                if (stdev_all.innerHTML != "-") {
-                    stdev_all.innerText += ' ' + chartType.units;
-                }
-            })
-        })
-    })
-    const songElems = ['song_years_mean', 'song_years_median']
-    songSubCategories.forEach(subcategory => {
-        songElems.forEach(elem => {
-            const roundAll = document.getElementById(dataset + "_" + elem + "_" + subcategory.suffix + '_all')
-            if (roundAll.innerHTML != '-') {
-                roundAll.innerHTML = Math.round(roundAll.innerHTML);
-            }
-            subcategory.id.forEach(ide => {
-                const toRound = document.getElementById(dataset + "_" + elem + '_' + ide)
-                if (toRound.innerHTML != '-') {
-                    toRound.innerHTML = Math.round(toRound.innerHTML);
-                }
-            })
-        })
-    })
-}
+        }
+    });
+})

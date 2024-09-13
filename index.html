@@ -2,24 +2,58 @@
 <html>
 
 <head>
-    <title>Michael's Music Anthology</title>
+    <title>Michael's Media Anthology</title>
+    <link rel="icon" href="images/favicon.png" type="image/png">
     <link rel="stylesheet" href="styles.css">
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body>
-    <h1>Michael's Music Anthology</h1>
     <!-- <progress id="progress-bar" value="0" max="100"></progress> -->
-    <ul id='datasetTabs' class="dataset-tabs tabs"></ul>
-    <div id='datasetTabContent' class="main-tab-content"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <img src="images/loading.gif" alt="Loading...">
+    </div>
+    <!-- <ul id='mediaTabs' class="media-tabs tabs"></ul> -->
+    <div id='mediaTabContent' class="media-tab-content">
+        <div id="music">
+            <h1>Michael's Music Anthology</h1>
+            <ul id='musicTabs' class="dataset-tabs tabs"></ul>
+            <div id='musicTabContent' class="main-tab-content"></div>
+        </div>
+        <!-- <div id="movies">
+            <h1>Michael's Movie Anthology</h1>
+            <ul id='movieTabs' class="movie-tabs tabs"></ul>
+            <div id='movieTabContent' class="movie-tab-content"></div>
+        </div>
+        <div id="games">
+            <h1>Michael's VG Anthology</h1>
+            <ul id='vgTabs' class="vg-tabs tabs"></ul>
+            <div id='vgTabContent' class="vg-tab-content"></div>
+        </div> -->
+    </div>
     <script src="debug.js"></script>
     <script src="math.js"></script>
+
     <script src="constants.js"></script>
-    <script src="html.js"></script>
+    <script src="media/music/constants.js"></script>
+    <script src="media/movie/constants.js"></script>
+    <script src="media/vg/constants.js"></script>
+
+    <script src="generalhtml.js"></script>
+    <script src="media/music/html.js"></script>
+    <script src="media/movie/html.js"></script>
+    <script src="media/vg/html.js"></script>
+
+    <script src="fetch.js"></script>
     <script src="data.js"></script>
-    <script src="albums.js"></script>
-    <script src="songs.js"></script>
+
+    <script src="media/music/albums.js"></script>
+    <script src="media/music/songs.js"></script>
+    <script src="media/music/all.js"></script>
+
+    <script src="media/vg/vg.js"></script>
+
     <script src="charts.js"></script>
     <script src="main.js"></script>
 </body>
