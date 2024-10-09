@@ -1,1 +1,0 @@
-const movieTabSections = ['era', 'stats', 'studios']

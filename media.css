@@ -1,0 +1,87 @@
+.wdas {
+    background-color: antiquewhite !important;
+}
+
+.pixar {
+    background-color: lightskyblue !important;
+}
+
+.ghibli {
+    background-color: deepskyblue !important;
+    color: white
+}
+
+.nes {
+    background-color: black !important;
+    color: red
+}
+
+.snes {
+    background-color: mediumpurple !important;
+    color: white
+}
+
+.n64 {
+    background-color: mediumseagreen !important;
+    color: red
+}
+
+.gcn {
+    background-color: slateblue !important;
+    color: white
+}
+
+.nintendo,
+.mario {
+    background-color: red !important;
+    color: white
+}
+
+.zelda {
+    background-color: green !important;
+    color: yellow
+}
+
+.smash {
+    background-color: black !important;
+    color: yellow
+}
+
+.dk {
+    background-color: red !important;
+    color: yellow
+}
+
+.valve,
+.half-life {
+    background-color: darkorange !important;
+    color: white
+}
+
+.finalfantasy {
+    background-color: white !important;
+}
+
+.banjo {
+    background-color: yellow !important;
+    color: blue
+}
+
+.kirby {
+    background-color: lightpink !important;
+}
+
+.pikmin {
+    background-color: palegreen !important;
+    color: forestgreen
+}
+
+.metroid {
+    background-color: darkorange !important;
+    color: darkred
+}
+
+.wario {
+    background-color: gold !important;
+    color: purple
+}

@@ -62,3 +62,30 @@ function findStandardDeviation(arr) {
     const standardDeviation = Math.sqrt(variance);
     return standardDeviation.toFixed(1);
 }
+function findHours(arr) {
+    const sum = findSum(arr)
+    const hours = Math.floor(sum / 60) + 'h ' + sum % 60 + 'm'
+    return hours
+}
+function findDays(arr) {
+    const sum = findSum(arr)
+    const days = (sum / 60 / 24).toFixed(1)
+    return days
+}
+function findUniqueLength(arr) {
+    const uniqueLength = [...new Set(arr)].length
+    return uniqueLength
+}
+function findLength(arr) {
+    const length = arr.length
+    return length
+}
+function makePlural(word) {
+    if (word.endsWith('s') || word.endsWith('sh') || word.endsWith('ch') || word.endsWith('x') || word.endsWith('z')) {
+        return word + 'es';
+    } else if (word.endsWith('y') && !/[aeiou]y$/.test(word)) {
+        return word.slice(0, -1) + 'ies';
+    } else {
+        return word + 's';
+    }
+}

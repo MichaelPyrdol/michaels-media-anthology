@@ -1,34 +1,34 @@
-const dataStore = {};
-dataTypes.forEach(category => {
-    dataStore[category.id.toLowerCase() + 'Data'] = [];
-});
 function loadClient() {
     gapi.client.setApiKey(API_KEY);
-    return gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')
+    gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4')
         .then(() => {
             console.log("GAPI client loaded for API");
-            let allPromises = dataTypes.map(dataType => {
-                return Promise.all(
-                    dataType.datasets.map(range => fetchData(dataType.sheetID, range, dataType.range))
-                );
+            const mediaTabs = document.querySelectorAll('.media-tabs li');
+            const mediaTab = document.querySelector('li.' + media[0].id+'_tab')
+            const mediaTabContentSelector = '.media-tab'
+            const mediaTabContents = document.querySelectorAll(mediaTabContentSelector);
+            simulateTab(mediaTabs, mediaTab, mediaTabContents, mediaTabContentSelector)
+        })
+        .catch(error => {
+            console.error("Error loading GAPI client: ", error);
+        });
+}
+function loadDataType(dataType) {
+    return Promise.all(
+        dataType.datasets.map(dataset => fetchData(dataType.sheetID, dataset, dataType.range))
+    )
+        .then(dataArray => {
+            const dataLocation = dataType.dataStore;
+            dataType.datasets.forEach((dataset, index) => {
+                dataLocation.push(dataArray[index]);
             });
-            return Promise.all(allPromises);
+            if (dataArray.length > 1) {
+                dataLocation.push(removeHeadersFromData(dataArray));
+            }
         })
-        .then(dataArrays => {
-            dataArrays.forEach((dataArray,index)=>{
-                const dataLocation=dataStore[dataTypes[index].id+'Data']
-                dataTypes[index].datasets.forEach((dataset,index1)=>{
-                    dataLocation.push(dataArray[index1]);
-                })
-                dataLocation.push(removeHeadersFromData(dataArray))
-            })
-            // Temporary
-            // dataTypes[2].datasetIDs.forEach((dataset, index) => {
-            //     processvgData(dataStore.vgData[index], dataset)
-            // })
-        })
-        .catch((error) => {
-            console.error("Error loading GAPI client or processing data", error);
+        .catch(error => {
+            // location.reload()
+            console.error("Error loading dataType or processing data: ", error);
         });
 }
 function fetchData(sheetID, dataset, range) {

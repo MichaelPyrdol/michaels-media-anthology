@@ -46,12 +46,12 @@ function drawPieChart(chart, arrays, title, labels, colors) {
             alignment: 'center'
         },
         colors: colors,
-        backgroundColor: "lightblue",
+        backgroundColor: backgroundColor,
         chartArea: { width: '100%' },
     };
     chart.draw(data, options);
 }
-function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
+function drawChart(chart, valueArrays, title, x_axis, y_axis, labels, colors) {
     let fullRange = determineFullRange(valueArrays, x_axis);
     if (title.split(' ')[2] == 'Decade') {
         fullRange = fullRange.map(year => Math.floor(year / 10) * 10);
@@ -69,13 +69,10 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
         dataArray.push(row);
     });
     let maxValue = ''
-    let vAxisTitle = ''
     if (title == 'Songs by Year') {
         maxValue = 120;
-        vAxisTitle = '# of Songs';
     } else if (title == 'Albums by Year') {
         maxValue = 10;
-        vAxisTitle = '# of Albums';
     }
     const data = google.visualization.arrayToDataTable(dataArray);
     const options = {
@@ -93,7 +90,7 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
             slantedTextAngle: 90
         },
         vAxis: {
-            title: vAxisTitle,
+            title: '# of ' + y_axis,
             maxValue: maxValue
         },
         legend: {
@@ -101,12 +98,12 @@ function drawChart(chart, valueArrays, title, x_axis, labels, colors) {
         },
         isStacked: true,
         colors: colors,
-        backgroundColor: "lightblue",
+        backgroundColor: backgroundColor,
         chartArea: { width: '80%' },
     };
     chart.draw(data, options);
 }
-function drawNominalChart(chart, dataArray, title, colors) {
+function drawNominalChart(chart, dataArray, title, x_axis, y_axis, colors) {
     const limitedDataArray = [dataArray[0], ...dataArray.slice(1, 31)];
     const data = google.visualization.arrayToDataTable(limitedDataArray);
     const options = {
@@ -115,21 +112,21 @@ function drawNominalChart(chart, dataArray, title, colors) {
             fontSize: chartTitleFontSize
         },
         hAxis: {
-            title: '# of Albums',
+            title: '# of ' + y_axis,
             minValue: 0,
             textStyle: {
                 fontSize: 11
             }
         },
         vAxis: {
-            title: 'Artist'
+            title: x_axis
         },
         legend: {
             position: 'top'
         },
         isStacked: true,
         colors: colors,
-        backgroundColor: "lightblue",
+        backgroundColor: backgroundColor,
         chartArea: { width: '40%', height: '80%' },
     };
     chart.draw(data, options);

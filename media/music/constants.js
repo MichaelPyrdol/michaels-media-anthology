@@ -1,17 +1,3 @@
-const musicMediums = ['albums', 'songs', 'all']
-const musicTabSections = [
-    ['art', 'era', 'stats', 'artists', 'list', 'durations'], // Albums
-    ['era', 'stats', 'artists', 'media', 'RSG'], // Songs
-    ['era', 'stats', 'artists', 'media'] // All
-]
-const datasetData = {
-    suffix: 'dataset',
-    id: dataTypes[0].datasets.map(dataset => dataset.toLowerCase()),
-    identifier: dataTypes[0].datasets,
-    abbrev: dataTypes[0].datasets,
-    labels: dataTypes[0].datasets,
-    colors: ['dodgerblue', 'tomato', 'gold', 'mediumseagreen', 'slateblue', 'darkgray']
-}
 const fav = {
     suffix: 'fav',
     id: ['fav', 'nonfav'],
@@ -52,7 +38,8 @@ const mf = {
     labels: ['Male', 'Female', 'Various'],
     colors: ['dodgerblue', 'tomato', 'gray']
 }
-const albumSubCategories = [fav, albumsVi, streaming, datasetData, sg, mf]
+const albumSubCategories = [fav, albumsVi, streaming, sg, mf]
+// Songs
 const songsFav = {
     suffix: 'fav',
     id: ['fav', 'nonfav'],
@@ -85,8 +72,8 @@ const songsAlbum = {
     labels: ['Album Songs', 'Non-album Songs'],
     colors: ['dodgerblue', 'tomato']
 }
-const songSubCategories = [songsFav, songsVi, streaming, datasetData, songsR, songsAlbum]
-const allFav = {
+const songSubCategories = [songsFav, songsVi, streaming, songsR, songsAlbum]
+const allMusicFav = {
     suffix: 'fav',
     id: ['albumfav', 'songfav', 'nonsongfav', 'nonalbumfav'],
     identifier: ['A', 'S', '', 'NS'],
@@ -94,27 +81,8 @@ const allFav = {
     labels: ['Album Favorites', 'Song Favorites', 'Album', 'Song'],
     colors: ['slateblue', 'deeppink', 'dodgerblue', 'tomato']
 }
-const allSubCategories = [allFav, albumsVi, streaming, datasetData, songsR]
-const subcategories = [albumSubCategories, songSubCategories, allSubCategories]
-let albumCategories = ['all']
-let songCategories = ['all']
-let allCategories = ['all']
-let categories = [albumCategories, songCategories, allCategories]
-categories.forEach((category, index) => {
-    subcategories[index].forEach(subcategory => {
-        subcategory.id.forEach(id => {
-            category.push(id)
-        })
-    })
-})
+const allMusicSubCategories = [allMusicFav, albumsVi, streaming, songsR]
 const albumChartTypes = [
-    {
-        id: 'albums_years',
-        sheetid: 'year',
-        title: 'Albums by Year',
-        x_axis: 'Year',
-        units: 'years'
-    },
     {
         id: 'num_songs',
         sheetid: 'num_songs',
@@ -137,119 +105,46 @@ const albumChartTypes = [
         units: 'minutes'
     }
 ]
-const songs_decades_config={
-    id: 'songs_decades',
-        sheetid: 'year',
-        title: 'Songs by Decade',
-        x_axis: 'Decade',
-        units: 'years'
-}
-const albums_decades_config={
-    id: 'albums_decades',
-        sheetid: 'year',
-        title: 'Albums by Decade',
-        x_axis: 'Decade',
-        units: 'years'
-}
-const all_decades_config={
-    id: 'all_decades',
-        sheetid: 'year',
-        title: 'Songs by Decade',
-        x_axis: 'Decade',
-        units: 'years'
-}
-const nominalAlbumChartTypes = [
+const albumsNominalChartTypes = [
     {
-        id: 'albums_artists',
-        sheetid: 'artist',
+        id: 'artist',
         title: 'Artist'
     },
     {
         id: 'nationality',
-        sheetid: 'nationality',
         title: 'Nationality'
-    },
-    {
-        id: 'vi',
-        sheetid: 'vi',
-        title: 'Vocal or Instrumental'
     }
 ]
-const albumPieChartTypes = [
+const albumPieChartTypes = []
+const songChartTypes = []
+const songsNominalChartTypes = [
     {
-        id: 'num_albums',
-        title: '# of Albums'
-    }
-]
-const songChartTypes = [
-    {
-        id: 'songs_years',
-        sheetid: 'year',
-        title: 'Songs by Year',
-        x_axis: 'Year',
-        units: 'years'
-    }
-]
-const nominalSongChartTypes = [
-    {
-        id: 'songs_artists',
-        sheetid: 'artist',
+        id: 'artist',
         title: 'Artist'
     },
     {
-        id: 'songs_origin',
-        sheetid: 'origin',
+        id: 'origin',
         title: 'Origin'
     },
     {
-        id: 'songs_platform',
-        sheetid: 'platform',
+        id: 'platform',
         title: 'Platform'
     }
 ]
-const songPieChartTypes = [
+const songPieChartTypes = []
+const allMusicChartTypes = []
+const allMusicNominalChartTypes = [
     {
-        id: 'songs_num_songs',
-        title: '# of Songs'
-    }
-]
-const allChartTypes = [
-    {
-        id: 'all_years',
-        sheetid: 'year',
-        title: 'Songs by Year',
-        x_axis: 'Year',
-        units: 'years'
-    }
-]
-const nominalAllChartTypes = [
-    {
-        id: 'all_artists',
-        sheetid: 'artist',
+        id: 'artist',
         title: 'Artist'
     },
     {
-        id: 'all_origin',
-        sheetid: 'origin',
+        id: 'origin',
         title: 'Origin'
     },
     {
-        id: 'all_platform',
-        sheetid: 'platform',
+        id: 'platform',
         title: 'Platform'
     }
 ]
-const allPieChartTypes = [
-    {
-        id: 'all_num_songs',
-        title: '# of Songs'
-    }
-]
-// const chartTypes = [albumChartTypes, songChartTypes, allChartTypes]
-// const nominalChartTypes = [nominalAlbumChartTypes, nominalSongChartTypes, nominalAllChartTypes]
-// const pieChartTypes = [albumPieChartTypes, songPieChartTypes, allPieChartTypes]
-const elementIDs = [
-    ["albums_years", "durations", 'stats', "albums_artists_chart", 'album_list'],
-    ["songs_years", 'songs_stats', 'songs_artists_chart', 'songs_media'],
-    ['all_years', 'all_stats', 'all_artists_chart', 'all_media']
-]
+const allMusicPieChartTypes = []
